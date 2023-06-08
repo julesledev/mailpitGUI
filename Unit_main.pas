@@ -48,7 +48,7 @@ type
     Label6: TLabel;
     Label7: TLabel;
     timerAutoRun: TTimer;
-    procedure FormCreatimerAutoRunte(Sender: TObject);
+    procedure FormCreate(Sender: TObject);
     procedure btnStopMailpitClick(Sender: TObject);
     procedure btnExitClick(Sender: TObject);
     procedure btnStartMailpitClick(Sender: TObject);
@@ -299,7 +299,7 @@ begin
   Self.Hide;
 end;
 
-procedure TfrmMain.FormCreatimerAutoRunte(Sender: TObject);
+procedure TfrmMain.FormCreate(Sender: TObject);
 var
   dbOption: String;
 begin
@@ -311,24 +311,7 @@ begin
 
   dsMailpit.CurrentDir := configPath;
   dsMailpitVersion.CurrentDir := configPath;
-
-  configIni := TIniFile.Create(TPath.Combine(configPath, CONFIG_FILENAME));
   dbOption := '';
-
-  if (configIni.ReadBool(MAILPIT_EXE, MAILPIT_NEED_DB_KEY, true)) then
-    dbOption := MAILPIT_DB_OPTION;
-
-  cbxMailpitDb.Checked := configIni.ReadBool(MAILPIT_EXE, MAILPIT_NEED_DB_KEY, true);
-
-  dsMailpitVersion.CommandLine := concat(DS_BASE, '"', MAILPIT_EXE, ' version"');
-
-  dsMailpit.CommandLine := concat(DS_BASE, '"', MAILPIT_EXE, ' --smtp-auth-accept-any --smtp-auth-allow-insecure -m ',
-
-    IntToStr(Integer.MaxValue), ' ', dbOption, ' "');
-
-  dsMailpitInstancesChecker.CommandLine := concat(DS_BASE, '"', 'tasklist /FI "IMAGENAME eq ', MAILPIT_EXE, '""');
-
-  dsMailpitKiller.CommandLine := concat(DS_BASE, '"', 'taskkill /F /IM ', MAILPIT_EXE, '"');
 
   // checking if instance exist
   if (IsSingleInstance(APP_NAME)) then
@@ -337,6 +320,23 @@ begin
     // creating config dir if it does not exist
     if (Not TDirectory.Exists(configPath)) then
       TDirectory.CreateDirectory(configPath);
+
+    configIni := TIniFile.Create(TPath.Combine(configPath, CONFIG_FILENAME));
+
+    if (configIni.ReadBool(MAILPIT_EXE, MAILPIT_NEED_DB_KEY, true)) then
+      dbOption := MAILPIT_DB_OPTION;
+
+    cbxMailpitDb.Checked := configIni.ReadBool(MAILPIT_EXE, MAILPIT_NEED_DB_KEY, true);
+
+    dsMailpitVersion.CommandLine := concat(DS_BASE, '"', MAILPIT_EXE, ' version"');
+
+    dsMailpit.CommandLine := concat(DS_BASE, '"', MAILPIT_EXE, ' --smtp-auth-accept-any --smtp-auth-allow-insecure -m ',
+
+      IntToStr(Integer.MaxValue), ' ', dbOption, ' "');
+
+    dsMailpitInstancesChecker.CommandLine := concat(DS_BASE, '"', 'tasklist /FI "IMAGENAME eq ', MAILPIT_EXE, '""');
+
+    dsMailpitKiller.CommandLine := concat(DS_BASE, '"', 'taskkill /F /IM ', MAILPIT_EXE, '"');
 
     Application.ProcessMessages;
 

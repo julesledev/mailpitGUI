@@ -149,7 +149,7 @@ object frmMain: TfrmMain
     007FE000007FE000007FE000007FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF}
   Position = poScreenCenter
   OnCloseQuery = FormCloseQuery
-  OnCreate = FormCreatimerAutoRunte
+  OnCreate = FormCreate
   TextHeight = 17
   object Panel1: TPanel
     Left = 0
