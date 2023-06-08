@@ -1,0 +1,19 @@
+@echo off
+timeout /t 5 /nobreak > nul
+start "" "C:\path\to\your\executable.exe"
+
+
+taskkill /IM cmd.exe /FI "WINDOWTITLE eq C:\path\to\your\batchfile.bat"
+
+taskkill /F /IM mailpit.exe
+
+tasklist /FI "IMAGENAME eq mailpit.exe"
+
+del mailpit.txt
+ren update.txt mailpit.txt
+
+@echo off 
+if exist "0.txt" del "0.txt"
+for %%a in (*.txt) do set "file=%%a"
+ren "%file%" "0.txt"
+

@@ -1,0 +1,7 @@
+@echo off
+
+taskkill /F /IM mailpitGUI.exe
+timeout /t 5 /nobreak > nul
+
+if exist "mailpitGUI.txt" del "mailpitGUI.txt"
+if exist "update.txt" ren "update.txt" "mailpitGUI.txt"
